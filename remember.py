@@ -1,3 +1,6 @@
+# A simple assistant that has a persistent memory based on reading and writing from the filesystem.
+# Requires GPT-4 to work well.
+# python remember.py --notes-dir ./notes
 from collections import defaultdict
 import os
 import openai
@@ -154,4 +157,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     os.makedirs(args.notes_dir, exist_ok=True)
     main(**vars(args))
-
