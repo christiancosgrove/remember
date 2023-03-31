@@ -34,6 +34,10 @@ Your notes directory currently:
 
 {notes_tree(notes_dir)}"""
 
+def print_command(text):
+    # Print in red
+    print(f"\033[91m{text}\033[0m")
+
 def validate_path(path):
     """ Paths are relative to the notes directory. They must not contain any ".." or ".". """
     return not any([p in path for p in [".", ".."]])
@@ -41,6 +45,7 @@ def validate_path(path):
 def read_note(notes_dir, path):
     if not validate_path(path):
         return "<invalid path>"
+    print_command(f"Reading from {os.path.join(notes_dir, path)}")
     """ Reads a note relative to the notes directory. Returns <empty> if the note does not exist. """
     try:
         with open(os.path.join(notes_dir, path)) as f:
@@ -51,7 +56,7 @@ def read_note(notes_dir, path):
 def write_note(notes_dir, path, content):
     if not validate_path(path):
         return
-    print("Writing to", os.path.join(notes_dir, path))
+    print_command(f"Writing to {os.path.join(notes_dir, path)}")
     """ Appends content to a note relative to the notes directory. If the directory does not exist, it is created. If the note does not exist, it is created. """
     os.makedirs(os.path.dirname(os.path.join(notes_dir, path)), exist_ok=True)
 
