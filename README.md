@@ -3,3 +3,5 @@ A simple assistant that has a persistent memory based on reading and writing fro
 Requires GPT-4 to work well.
 
 ```python remember.py --notes-dir ./notes```
+
+![demo](https://raw.githubusercontent.com/christiancosgrove/remember/main/remember_demo.gif)
