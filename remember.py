@@ -20,9 +20,7 @@ def get_notes():
 def system_prompt(notes_dir):
     return f"""You are a helpful assistant, but your memory does not work. When the user sends you a message, you won't remember anything else they or you have said previously. However, you can take notes.
 
-The user's input will start with a line containing only '\\MESSAGE'.
-
-Your output should contain series of '\\READ' lines, followed by a \\MESSAGE line, followed by one or more lines containing your reply, followed by a series of '\\WRITE' lines.
+Your output should contain series of '\\READ', '\\MESSAGE', and '\\WRITE' commands. Each command can be followed by a path and also subsequent lines of text. The following commands are available:
 
 \\READ <path> - Print the contents of the note at <path> to the console.
 \\MESSAGE - Output your reply to the user's message.
@@ -123,8 +121,6 @@ def assistant_loop(notes_dir):
         assistant_read_commands = get_completion([{ "role": "system", "content": system_input }] + conversation, stop=["\\MESSAGE"])["content"]
         # Get the file outputs
         context_str = ""
-        lines = assistant_read_commands.splitlines()
-
         commands = parse_commands(assistant_read_commands)
         # for i, path in parse_read_commands(assistant_read_commands):
         for path in commands["\\READ"]:
@@ -148,8 +144,10 @@ def assistant_loop(notes_dir):
             content = content.splitlines()[1:]
             write_note(notes_dir, path, "\n".join(content))
 
-        message = commands["\\MESSAGE"][0]
-        print("Assistant:", message.strip())
+        if len(commands["\\MESSAGE"]) > 0:
+            print("Assistant:", commands["\\MESSAGE"][0].strip())
+        else:
+            print("Assistant: <empty>")
 
 def main(notes_dir=None):
     assert notes_dir is not None, "notes_dir must be specified"
